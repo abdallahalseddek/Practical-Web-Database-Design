@@ -71,4 +71,6 @@ SELECT c. customerid, c. firstname, c. lastname
   HAVING SUM(o.totalamount > 500)       -- put the amount you want
 ;
 ```
- 
+### Book E-commerce Example
+As I mentioned earlier, the author discussed in `Ch.5` the steps
+//الخطوات اللي هنعملها عشان نستخرج التصميم بتاع الداتا بيز من الكتاب
