@@ -2,16 +2,61 @@
 ### This `README` file contains my hand-work from database concepts discussed in the book. Also, I Implemented the applications described in the book as an illustrative example.
 ## Index:
 - [An Intro to the content of the book](#book-content)
-- [Ecommerce Application Design](#e-commerce-app-design)
+- [Book Example Design and Impl in MySql & PostgresSql](#book-e-commerce-example)
+- [Ecommerce Application Design](#my-hands-on-e-commerce-app-design)
   * [Normalized Design](#normalized-design)
   * [Denormalized Design](#denormalized-design)
-- [Some Queries like : top-selling products&Daily or Monthly Reports](#important-queries)
-- [Book Example Design and Impl in MySql & PostgresSql](#book-e-commerce-example)
+- [Some Queries like : top-selling products And Daily or Monthly Reports](#important-queries)
 
 ### Book Content
-TODO: Book Chapters briefly description
+Practical web database design is a great text book that had written by experienced professional engineers.
+They made an insightful database work consists of Nine chapters and Appendix.
+On Their first words, They gave us a good introduction about database definition, 
+a short history about how we start thinking for `files` alternative, what is the DBMS and its models, 
+and is there a database on the web? if so, how about using it in web application.  
+After that, The author discussed core database concepts, e.g., Data model, Relational Model and 
+how it consists of `Tables`, `Rows`, `Columns`, The Domains and data types.
+They explained data model constrains and how to use primary keys and foreign keys in a wise DB Model Design.<br>
 
-### E-Commerce App Design
+At the End of Ch.2, He talked about `Normalization`, `Indexs`, `Data Integrity`.
+The book explained five normalization forms with good examples, Physical data access methods, e.g.,
+sequential access, direct access, indexed access, and data integrity rules.<br>
+
+After that we are seeing the author talking about `Sql` history, and it's categories.
+What is Data Definition Language(DDL), DML, Querying using `Select`, `WHERE`, `HAVING`, and `JOIN` clauses.
+The Book has a good E-commerce example for these concepts started from ch.3 till ch.7.<br>
+
+when The Author intended to talk about Database Design Fundamentals, 
+He gave us, At first, a solid academic definitions about data modeling, Model `Entities`,
+its `attributes`, `Relationships`.
+we found a well-described project to explain where to use OneToMany or ManyToMany, its recursive version,
+and OneToOne Relationships.<br>
+
+The End of ch.4 is a brilliant explanation about `DeNormalization` for Performance purposes.<br>
+
+I found chapter five in this book is a legend for every software engineer and business owner. 
+These insightful papers gave us the guide from A~Z in System design process.
+How to start the process with the owner and customer, what are the questions to ask them about,
+so you can get your goal obvious.<br>
+After **Gathering Information**, we can step into Identifying System Entities, Attributes, Relationships. 
+Ending By preparing your conceptual data model.<br>
+
+In the end, the author addresses advanced database features
+- Sub-Queries
+- Stored Procedures and Triggers
+- Database Tuning
+- Types of Index
+- Managing Concurrency: Locking and Transactions. <br>
+
+Also, Book Authors address two main chapters about Database Security and Maintenance. 
+These topics are more towards System Administration work, 
+but it is good for us to know how to perform good security rules. 
+
+### Book E-commerce Example
+As I mentioned earlier, the author discussed in `Chapter.5` 
+What is the SOLID steps to follow, so you can result a well-designed project.<br> 
+TODO: continue book ecommerce section with ERD and spring impl code
+### My Hands-On E-Commerce App Design
 The app is e-commerce that has `Order`, `Product`, `Category`, and `Customer` Entities.<br>
 * Customer can purchase many orders so it will be a `OneToMany` Relationship. 
 As a One **Customer** linked to Many **Orders**.
@@ -71,6 +116,3 @@ SELECT c. customerid, c. firstname, c. lastname
   HAVING SUM(o.totalamount > 500)       -- put the amount you want
 ;
 ```
-### Book E-commerce Example
-As I mentioned earlier, the author discussed in `Ch.5` the steps
-//الخطوات اللي هنعملها عشان نستخرج التصميم بتاع الداتا بيز من الكتاب
