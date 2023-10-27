@@ -55,7 +55,17 @@ but it is good for us to know how to perform good security rules.
 ### Book E-commerce Example
 As I mentioned earlier, the author discussed in `Chapter.5` 
 What is the SOLID steps to follow, so you can result a well-designed project.<br> 
+
 TODO: continue book ecommerce section with ERD and spring impl code
+
+
+
+
+ <p align="center">
+    <img src="img/DB_schema_book_e_commerce.png">
+</p>
+<p style="text-align: center">E-Commerce ERD Diagram</p>
+
 ### My Hands-On E-Commerce App Design
 The app is e-commerce that has `Order`, `Product`, `Category`, and `Customer` Entities.<br>
 * Customer can purchase many orders so it will be a `OneToMany` Relationship. 
@@ -77,7 +87,7 @@ Normalized Form of the app like the design below.<br>
 ### DeNormalized Design
 when the customer creat an order, 
 I need his/her email and full-name to notify him/her with an email containing the order details and shipping information.<br>
-we need to **Denormalize this design, so it would be easy for the Query to get customer info.
+we need to **Denormalize** this design, so it would be easy for the Query to get customer info.
 I added user-name and email to `Order` Entity
 > Here is Redundant info, but **Better Performance**.
  <p align="center">
