@@ -53,6 +53,7 @@ These topics are more towards System Administration work,
 but it is good for us to know how to perform good security rules. 
 
 ### Book E-commerce Example
+
 As I mentioned earlier, the author discussed in `Chapter.5` 
 What is the SOLID steps to follow, so you can result a well-designed project.<br> 
 
@@ -64,7 +65,7 @@ TODO: continue book ecommerce section with ERD and spring impl code
  <p align="center">
     <img src="img/DB_schema_book_e_commerce.png">
 </p>
-<p style="text-align: center">E-Commerce ERD Diagram</p>
+<h3 align="center">E-Commerce ERD Diagram</h3>
 
 ### My Hands-On E-Commerce App Design
 The app is e-commerce that has `Order`, `Product`, `Category`, and `Customer` Entities.<br>
@@ -77,12 +78,14 @@ Here we have an associative Entity (**OrderDetails**)
 So it will be a one category linked to many products as `OneToMany` Relation
 >You can Access a``SQL`` file for creating the database schema: [DB Schema.](sql/create_DB_Schema.sql) <br> 
 Also, if you need to test the database design and queries listed below, you can use these [Fake Data.](sql/mock%20data%20genrator)
+
 ### Normalized Design
 Normalized Form of the app like the design below.<br>
  <p align="center">
     <img src="img/task_ERD_Normalized_01.jpg">
 </p>
-<p style="text-align: center">Normalized ERD Design</p>
+<p style="text-align: center"></p>
+<h3 align="center">Normalized ERD Design</h3>
 
 ### DeNormalized Design
 when the customer creat an order, 
@@ -93,7 +96,7 @@ I added user-name and email to `Order` Entity
  <p align="center">
     <img src="img/task_Denormalized_ERD_01.png">
 </p>
-<p style="text-align: center">DeNormalized ERD Design</p>
+<h3 align="center">DeNormalized ERD Design</h3>
 
 ### Important Queries
 * Daily Report
