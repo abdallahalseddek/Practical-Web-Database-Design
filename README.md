@@ -151,14 +151,21 @@ where productname like 'camera' or productdescription like 'camera';
   we need the customer to know what else we have he might be interested in,
   so when the customer is viewing a product, the system will suggest products from the similar category
 ```mysql
+SELECT p.productname FROM product AS p
+INNER JOIN category AS c ON p.categoryid = c.categoryid
+WHERE p.categoryid = 
+(SELECT categoryid FROM product WHERE productid = 'viewed_product_id')
+AND p.productid <> 'viewed_product_id'                           -- select the viewed product id 
+ORDER BY 
+(SELECT COUNT(*) FROM orderdetails AS od WHERE od.productid = p.productid) DESC
+LIMIT 5
+;
 ```
 * <h4>Trigger to Create a sale history</h4>
-when the customer purchases a new order, create a history sale in the database for this customer.
-The sale history details may be order date, customer full name, products purchased in the order.
-The trigger should be triggered on the order insertion.
+when the customer purchases a new order, create a history sale in the database for this customer. The sale history details may be order date, customer full name, products purchased in the order. The trigger should be triggered on the order insertion.
 ```postgresql
 ```
 ### Tools
-- <a href="https://www.jetbrains.com/idea/" target="_blank">Intellij IDEA Ultimate</a>
+- [Intellij IDEA Ultimate](https://www.jetbrains.com/idea/)
 - [DB Diagram](https://dbdiagram.io/)
 - [PostgreSQL Pgadmin4](https://www.pgadmin.org/)
