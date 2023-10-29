@@ -159,6 +159,6 @@ The trigger should be triggered on the order insertion.
 ```postgresql
 ```
 ### Tools
-- [Intellij IDEA Ultimate](https://www.jetbrains.com/idea/)
+- <a href="https://www.jetbrains.com/idea/" target="_blank">Intellij IDEA Ultimate</a>
 - [DB Diagram](https://dbdiagram.io/)
 - [PostgreSQL Pgadmin4](https://www.pgadmin.org/)
