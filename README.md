@@ -110,7 +110,7 @@ I added user-name and email to `Order` Entity
 <h3 align="center">DeNormalized ERD Design</h3>
 
 ### Important Queries
-* <h3>Daily Report</h3>
+* <h4>Daily Report</h4>
 Business Owner wants a daily report of the total revenue for a specific date.
 we can get the total revenue by get the summation of the `orderTotalAmount` for A specific `Order` where the date is `orderDate`
 ```mysql
@@ -118,7 +118,7 @@ SELECT SUM(ordertotalamount)
   FROM "Order" WHERE
   DATE(orderdate)='2023-09-09';          -- write specific date you want 
 ```
-* <h3>Monthly Report </h3>
+* <h4>Monthly Report </h4>
 Business Owner wants a monthly report Of the top-selling products in a given month.
 ```mysql
 SELECT DATE_FORMAT(orderdate,'%y-%m') AS Months, productId
@@ -129,7 +129,7 @@ SELECT DATE_FORMAT(orderdate,'%y-%m') AS Months, productId
   ORDER BY totalQuantity DESC
   ;
 ```
-* List customers whom orders in a month more than an amount of money.<br>
+* <h4>List all customers who order in a month more than an amount of money.</h4>
 Business Owner wants list Of customers who have placed orders totaling more than $500 in the past month.
 ```mysql
 SELECT c. customerid, c. firstname, c. lastname
@@ -140,15 +140,25 @@ SELECT c. customerid, c. firstname, c. lastname
   HAVING SUM(o.totalamount > 500)       -- put the amount you want
 ;
 ```
-* Search for all products with the word 'camera' in either the product_name or product_description.<br>
+* <h4>Search for all products with the word 'camera' in either the product_name or product_description.</h4>
 searching is a fundamental feature for any website now, not only ecommerce,
 so we should care about how fast it is and accurate for searching results
 ```mysql
 select productid, productname,productname from product
 where productname like 'camera' or productdescription like 'camera';
 ```
-
+* <h4>Suggest popular products </h4>
+  we need the customer to know what else we have he might be interested in,
+  so when the customer is viewing a product, the system will suggest products from the similar category
+```mysql
+```
+* <h4>Trigger to Create a sale history</h4>
+when the customer purchases a new order, create a history sale in the database for this customer.
+The sale history details may be order date, customer full name, products purchased in the order.
+The trigger should be triggered on the order insertion.
+```postgresql
+```
 ### Tools
-- [Intellij IDEA ultimate](https://www.jetbrains.com/idea/)
+- [Intellij IDEA Ultimate](https://www.jetbrains.com/idea/)
 - [DB Diagram](https://dbdiagram.io/)
 - [PostgreSQL Pgadmin4](https://www.pgadmin.org/)
