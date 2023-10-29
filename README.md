@@ -6,7 +6,8 @@
 - [Ecommerce Application Design](#my-hands-on-e-commerce-app-design)
   * [Normalized Design](#normalized-design)
   * [Denormalized Design](#denormalized-design)
-- [Some Queries like : top-selling products And Daily or Monthly Reports](#important-queries)
+- [Some Common Queries, e.g., top-selling products And Daily or Monthly Reports](#important-queries)
+- [The Tools which I used In the project](#tools)
 
 ### Book Content
 Practical web database design is a great text book that had written by experienced professional engineers.
@@ -56,13 +57,23 @@ but it is good for us to know how to perform good security rules.
 
 As I mentioned earlier, the author discussed in `Chapter.5` 
 What is the SOLID steps to follow, so you can result a well-designed project.<br> 
+The author strongly recommends to analysis system requirements firstly with the business owner 
+and some possible customers by asking these questions(mentioned in`ch5`) 
+for example we can ask about the kind of products will be sold? what information 
+about the products must be maintained in the Database? How should the database store customer orders?
+and other many questions, so you can estimate the size of the application and how far should we care in 
+the design about performance or scalability.<br>
+After Gathering system information from the business 
+we can see that the system must contain products entity. 
+The `Product` entity must contain every available information for various different 
+products which are not in the same category. 
+Here we can find it's reasonable to have a lot of `null` in the `product` entity.<br>
 
-TODO: continue book ecommerce section with ERD and spring impl code
+All other rest of system entities are described in the ERD Diagram below and those relationships.
+I Implemented these `model` classes using `Java` , `Spring Data Jpa`. Take a look [here.](Java_Impl/book_e_commerce_example_impl/src)  
+I used postgreSQL to generate and test the Database, as you can access the `sql` code to create your Own schema from the system [from here.](sql/create_DB_schema_book_e_commerce.sql)
 
-
-
-
- <p align="center">
+<p align="center">
     <img src="img/DB_schema_book_e_commerce.png">
 </p>
 <h3 align="center">E-Commerce ERD Diagram</h3>
@@ -76,8 +87,8 @@ So I linked them with `ManyToMany` Relationship:
 Here we have an associative Entity (**OrderDetails**)  
 * Category always had many products. 
 So it will be a one category linked to many products as `OneToMany` Relation
->You can Access a``SQL`` file for creating the database schema: [DB Schema.](sql/create_DB_Schema.sql) <br> 
-Also, if you need to test the database design and queries listed below, you can use these [Fake Data.](sql/mock%20data%20genrator)
+> You can Access a``SQL`` file for creating the database schema: [DB Schema.](sql/create_DB_Schema.sql) <br>
+> Also, if you need to test the database design and queries listed below, you can use these [Fake Data.](sql/mock%20data%20genrator)
 
 ### Normalized Design
 Normalized Form of the app like the design below.<br>
@@ -99,7 +110,7 @@ I added user-name and email to `Order` Entity
 <h3 align="center">DeNormalized ERD Design</h3>
 
 ### Important Queries
-* Daily Report
+* <h3>Daily Report</h3>
 Business Owner wants a daily report of the total revenue for a specific date.
 we can get the total revenue by get the summation of the `orderTotalAmount` for A specific `Order` where the date is `orderDate`
 ```mysql
@@ -107,7 +118,7 @@ SELECT SUM(ordertotalamount)
   FROM "Order" WHERE
   DATE(orderdate)='2023-09-09';          -- write specific date you want 
 ```
-* Monthly Report 
+* <h3>Monthly Report </h3>
 Business Owner wants a monthly report Of the top-selling products in a given month.
 ```mysql
 SELECT DATE_FORMAT(orderdate,'%y-%m') AS Months, productId
@@ -118,7 +129,7 @@ SELECT DATE_FORMAT(orderdate,'%y-%m') AS Months, productId
   ORDER BY totalQuantity DESC
   ;
 ```
-* List customers whom orders in a month more than an amount of money
+* List customers whom orders in a month more than an amount of money.<br>
 Business Owner wants list Of customers who have placed orders totaling more than $500 in the past month.
 ```mysql
 SELECT c. customerid, c. firstname, c. lastname
@@ -129,3 +140,15 @@ SELECT c. customerid, c. firstname, c. lastname
   HAVING SUM(o.totalamount > 500)       -- put the amount you want
 ;
 ```
+* Search for all products with the word 'camera' in either the product_name or product_description.<br>
+searching is a fundamental feature for any website now, not only ecommerce,
+so we should care about how fast it is and accurate for searching results
+```mysql
+select productid, productname,productname from product
+where productname like 'camera' or productdescription like 'camera';
+```
+
+### Tools
+- [Intellij IDEA ultimate](https://www.jetbrains.com/idea/)
+- [DB Diagram](https://dbdiagram.io/)
+- [PostgreSQL Pgadmin4](https://www.pgadmin.org/)
