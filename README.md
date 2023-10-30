@@ -165,6 +165,19 @@ LIMIT 5
 when the customer purchases a new order, create a history sale in the database for this customer. The sale history details may be order date, customer full name, products purchased in the order. The trigger should be triggered on the order insertion.
 ```postgresql
 ```
+* <h4>Transaction to lock a field</h4> 
+write a transaction to lock quantity field with product id = 211 from being updated.<br>
+And another transaction to lock the row.
+```postgresql
+-- Lock the field quantity with product id = 211 
+begin;
+select quantity from product where productid = 211 ;
+commit;
+-- Lock the row with product_id = 211 for update
+begin;
+select * from product where productid = 211 for update;
+commit;
+```
 ### Tools
 - [Intellij IDEA Ultimate](https://www.jetbrains.com/idea/)
 - [DB Diagram](https://dbdiagram.io/)
