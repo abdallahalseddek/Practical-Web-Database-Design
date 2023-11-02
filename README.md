@@ -8,6 +8,12 @@
   * [Denormalized Design](#denormalized-design)
 - [Some Common Queries, e.g., top-selling products And Daily or Monthly Reports](#important-queries)
 - [The Tools which I used In the project](#tools)
+- [MySQL DataBase Performance Tuning](#database-performance-tuning)
+  - [Using `explain` keyword for query Optimization](#using-explain-keyword-for-query-optimization)
+  - [Index performance, covering index, and composite index key best-practices](#index-performance-covering-index-and-composite-index-key-best-practices)
+  - [Choosing primary key is a matter](#choosing-primary-key-is-a-matter)
+  - [MySQL Architecture](#mysql-architecture)
+  - [Spotting performance issues, and High-Performance configuration](#spotting-performance-issues-and-high-performance-configuration)
 
 ### Book Content
 Practical web database design is a great text book that had written by experienced professional engineers.
@@ -178,7 +184,51 @@ begin;
 select * from product where productid = 211 for update;
 commit;
 ```
+### DataBase Performance Tuning
+Performance tuning is a critical topic that every developer should care about.<br>
+A subsection in `ch.8` of the book gives a quick look about database tuning, 
+so I found it is a fundamental subject, and I need to deep dive into it.<br>
+I listened to **MySQL Database Tuning** course on 
+[YouTube](https://www.youtube.com/playlist?list=PLBrWqg4Ny6vXQZqsJ8qRLGRH9osEa45sw).<br>
+For `MySQL` database engine, we will talk about :
+
+#### Using `explain` keyword for query Optimization
+> MySQL creates a query plan before each query
+
+when I have a query to optimize, 
+I'll `Analyize` why is it slow? or why it impacts the system too much?<br>
+the main tool fo this is `explain` statement 
+which provides information about <br>
+**the query plan chosen by the optimizer 
+and the optimizer has to make a few decisions before executing each query**<br>
+
+If the client wants to fetch data from my database, we have 3 options for doing this:
+1. Fetch the data directly from a table.
+This is called **full scan**, it's normally works best for the small tables.
+As it fetches all rows from the table and checks against the condition,
+it's the worst time-response way to use!
+2. Go to the `index` and stops here, because all required columns are in the index.
+if it so, we have an `index covering`, the index is used to filter out `rows` then access these rows from the table,
+usually this is the best time-response way to access a table, but this is less often a case exists.
+3. Get the Records location from `index`, and go to the table to get the actual data.
+ <p align="center">
+    <img src="img/mysql_query.png">
+</p>
+<p style="text-align: center"></p>
+<h3 align="center">Query Paths when fetch the data</h3>
+
+If we have a slow `query`, the first thing to do is running it with `explain`. 
+It shows the query plan, or you can say **the list things expected to happen when the query is executed**.<br>
+If I run the query with `explain analyze`, we will get both the estimation of what the planner expected 
+along with what happens when the query runs.
+```mysql
+explain select * from orders;
+-- run with explain analyze 
+explain analyze select * from orders;
+```
+
 ### Tools
 - [Intellij IDEA Ultimate](https://www.jetbrains.com/idea/)
 - [DB Diagram](https://dbdiagram.io/)
 - [PostgreSQL Pgadmin4](https://www.pgadmin.org/)
+- [MySQL phpMyAdmin](https://www.phpmyadmin.net/)
