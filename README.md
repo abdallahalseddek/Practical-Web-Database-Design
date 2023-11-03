@@ -11,7 +11,6 @@
 - [MySQL DataBase Performance Tuning](#database-performance-tuning)
   - [Using `explain` keyword for query Optimization](#using-explain-keyword-for-query-optimization)
   - [Index performance, covering index, and composite index key best-practices](#index-performance-covering-index-and-composite-index-key-best-practices)
-  - [Choosing primary key is a matter](#choosing-primary-key-is-a-matter)
   - [MySQL Architecture](#mysql-architecture)
   - [Spotting performance issues, and High-Performance configuration](#spotting-performance-issues-and-high-performance-configuration)
 
@@ -76,7 +75,7 @@ products which are not in the same category.
 Here we can find it's reasonable to have a lot of `null` in the `product` entity.<br>
 
 All other rest of system entities are described in the ERD Diagram below and those relationships.
-I Implemented these `model` classes using `Java` , `Spring Data Jpa`. Take a look [here.](Java_Impl/book_e_commerce_example_impl/src)  
+I Implemented these `model` classes using `Java` , `Spring Data Jpa`. Take a look [here.](code/book_e_commerce_example_impl/src)  
 I used postgreSQL to generate and test the Database, as you can access the `sql` code to create your Own schema from the system [from here.](sql/create_DB_schema_book_e_commerce.sql)
 
 <p align="center">
@@ -96,14 +95,7 @@ So it will be a one category linked to many products as `OneToMany` Relation
 > You can Access a``SQL`` file for creating the database schema: [DB Schema.](sql/create_DB_Schema.sql) <br>
 > Also, if you need to test the database design and queries listed below, you can use these [Fake Data.](sql/mock%20data%20genrator)
 
-### Normalized Design
-Normalized Form of the app like the design below.<br>
- <p align="center">
-    <img src="img/task_ERD_Normalized_01.jpg">
-</p>
-<p style="text-align: center"></p>
-<h3 align="center">Normalized ERD Design</h3>
-
+Here you can find [ERD Normalized](img/task_ERD_Normalized_01.jpg) Form of the app.<br>
 ### DeNormalized Design
 when the customer creat an order, 
 I need his/her email and full-name to notify him/her with an email containing the order details and shipping information.<br>
@@ -212,10 +204,10 @@ if it so, we have an `index covering`, the index is used to filter out `rows` th
 usually this is the best time-response way to access a table, but this is less often a case exists.
 3. Get the Records location from `index`, and go to the table to get the actual data.
  <p align="center">
-    <img src="img/mysql_query.png">
+    <img src="img/mysql_query_plan.png">
 </p>
 <p style="text-align: center"></p>
-<h3 align="center">Query Paths when fetch the data</h3>
+<h3 align="center">MySQL Query Paths when fetch the data</h3>
 
 If we have a slow `query`, the first thing to do is running it with `explain`. 
 It shows the query plan, or you can say **the list things expected to happen when the query is executed**.<br>
@@ -225,10 +217,59 @@ along with what happens when the query runs.
 explain select * from orders;
 -- run with explain analyze 
 explain analyze select * from orders;
+-- show explain in json or tree format
+explain format=json select * from product ;
+-- show explain in tree format
+explain format=tree select * from product ;
 ```
+**Tips**:
+ - pay attention to weather the estimates, and the actual cost differs from each other, 
+ if there is a big difference, the optimizer is making poor decisions. 
+ Running `analyze` table cause is a good thing to start.
+ - when analyzing a query, we should care about `cache` it is **Hot** or **Cold**
+ as it for sure affects the amount of time for the query.
+
+> **Conclusion**:
+> - explain analyze is a profiling tool for your queries that will
+> reveal where mySQL spends time on the query and why?
+> display the difference between planning vg actual execution
+
+
+#### Index performance, covering index, and composite index key best-practices
+[Multi-Column index](img/composite_index.png) is known also as a composite index.<br>
+when querying data from a table, we can do this
+with two conditions, and every column is index individually, Or we can index the two columns in a composite index.
+Also, we can query the data with no index!
+I'm testing in `userinfo` [table](code/userinfo.sql)
+```mysql
+-- No index so mysql does a full coverage here and took long time response
+explain analyze select count(*) from userinfo where name = 'John100' and state_id = 100;
+-- create individual index 
+-- use analyze table and you'll find it's much faster now
+alter table userinfo add index name_idx(name);
+alter table userinfo add index state_id_idx(state_id);
+-- drop the two column indexes 
+drop index name_idx(name);
+drop index state_id_idx(state_id);
+-- create the composite index
+alter table userinfo add index name_state_idx(name,state_id);
+```
+The benchmark time result from comparing these indexes' options is :
+<p align="center">
+    <img src="img/index_results.png">
+</p>
+<p style="text-align: center"></p>
+
+Redundant indexes are not a good thing to keep in your schema. 
+Use this simple query to know what Redundant you have 
+```mysql
+select * from sys.schema_redundant_indexes\G;
+```
+> you can access the [python script](code/data_generate.py) that I used to generate one million fake data.
+>, also another [script](code/benchmark.py) for benchmark testing.
 
 ### Tools
 - [Intellij IDEA Ultimate](https://www.jetbrains.com/idea/)
 - [DB Diagram](https://dbdiagram.io/)
 - [PostgreSQL Pgadmin4](https://www.pgadmin.org/)
-- [MySQL phpMyAdmin](https://www.phpmyadmin.net/)
+- [MySQL WorkBench](https://www.mysql.com/products/workbench/)
