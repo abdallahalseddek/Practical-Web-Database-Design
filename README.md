@@ -4,16 +4,14 @@
 - [An Intro to the content of the book](#book-content)
 - [Book Example Design and Impl in MySql & PostgresSql](#book-e-commerce-example)
 - [Ecommerce Application Design](#my-hands-on-e-commerce-app-design)
-  * [Normalized Design](#normalized-design)
-  * [Denormalized Design](#denormalized-design)
+  * [Normalized ERD Design](#denormalized-design)
 - [Some Common Queries, e.g., top-selling products And Daily or Monthly Reports](#important-queries)
-- [The Tools which I used In the project](#tools)
 - [MySQL DataBase Performance Tuning](#database-performance-tuning)
   - [Using `explain` keyword for query Optimization](#using-explain-keyword-for-query-optimization)
-  - [Index performance, covering index, and composite index key best-practices](#index-performance-covering-index-and-composite-index-key-best-practices)
+  - [Indexes performance and best-practices](#index-performance-covering-index-and-composite-index-key-best-practices)
   - [MySQL Architecture](#mysql-architecture)
-  - [Spotting performance issues, and High-Performance configuration](#spotting-performance-issues-and-high-performance-configuration)
-
+- [The Tools which I used In the project](#tools)
+  
 ### Book Content
 Practical web database design is a great text book that had written by experienced professional engineers.
 They made an insightful database work consists of Nine chapters and Appendix.
@@ -305,9 +303,8 @@ InnoDb is the default storage engine for MySQL.
 <p align="center">
     <img src="img/mysql_architecture.png" alt="mysql_architecture">
 </p>
-<h3 align="center">MySQL Architecture</h3>
+<h4 align="center">MySQL Architecture</h4>
 
-#### Spotting performance issues, and High-Performance configuration
 ### Tools
 - [Intellij IDEA Ultimate](https://www.jetbrains.com/idea/)
 - [DB Diagram](https://dbdiagram.io/)
