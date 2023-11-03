@@ -166,7 +166,7 @@ when the customer purchases a new order, create a history sale in the database f
 * <h4>Transaction to lock a field</h4> 
 write a transaction to lock quantity field with product id = 211 from being updated.<br>
 And another transaction to lock the row.
-```postgresql
+```mysql
 -- Lock the field quantity with product id = 211 
 begin;
 select quantity from product where productid = 211 ;
@@ -206,7 +206,6 @@ usually this is the best time-response way to access a table, but this is less o
  <p align="center">
     <img src="img/mysql_query_plan.png">
 </p>
-<p style="text-align: center"></p>
 <h3 align="center">MySQL Query Paths when fetch the data</h3>
 
 If we have a slow `query`, the first thing to do is running it with `explain`. 
@@ -229,8 +228,8 @@ explain format=tree select * from product ;
  - when analyzing a query, we should care about `cache` it is **Hot** or **Cold**
  as it for sure affects the amount of time for the query.
 
-> **Conclusion**:
-> - explain analyze is a profiling tool for your queries that will
+> **Conclusion**:<br>
+> explain analyze is a profiling tool for your queries that will
 > reveal where mySQL spends time on the query and why?
 > display the difference between planning vg actual execution
 
@@ -244,13 +243,16 @@ I'm testing in `userinfo` [table](code/userinfo.sql)
 ```mysql
 -- No index so mysql does a full coverage here and took long time response
 explain analyze select count(*) from userinfo where name = 'John100' and state_id = 100;
+
 -- create individual index 
 -- use analyze table and you'll find it's much faster now
 alter table userinfo add index name_idx(name);
 alter table userinfo add index state_id_idx(state_id);
+
 -- drop the two column indexes 
 drop index name_idx(name);
 drop index state_id_idx(state_id);
+
 -- create the composite index
 alter table userinfo add index name_state_idx(name,state_id);
 ```
@@ -258,7 +260,6 @@ The benchmark time result from comparing these indexes' options is :
 <p align="center">
     <img src="img/index_results.png">
 </p>
-<p style="text-align: center"></p>
 
 Redundant indexes are not a good thing to keep in your schema. 
 Use this simple query to know what Redundant you have 
@@ -268,6 +269,45 @@ select * from sys.schema_redundant_indexes\G;
 > you can access the [python script](code/data_generate.py) that I used to generate one million fake data.
 >, also another [script](code/benchmark.py) for benchmark testing.
 
+#### MySQL Architecture
+Mysql is very different from other database servers and, 
+as its architectural characteristics make it useful for a wide range of purposes.
+It's flexible enough to work well in very demanding environments, 
+e.g., web apps, data warehouse, online transactions.<br>
+To get the most of MySQL, you should understand well its design so to work with it not against it.<br>
+
+MySql server is divided into three layers as shown below. 
+The first layer contains the services that are not unique to MySQL: connection handling, authentication, security, and so for.
+The client server protocol makes MySQL communication simple and fast, but it is limited as there is no flow control.
+Once one side sends a message, the other side must fetch the entire message before responding. 
+This is why `limit` clauses are so important.<br>
+
+The default behavior for most libraries when connecting to mysql is to 
+fetch the whole result and buffer it in memory. Until the all rows is being fetched, 
+MySQL server will not release the logs and other resources required by the query.<br>
+
+After handling the connection, mysql parser breaks the query into tokens and 
+builds a [parse tree](img/parse_tree_example.png) from the query parts.
+Parser uses `sql` grammar to interpret and validate the query. Next, the preprocessor checks the privileges.<br>
+
+The second layer included the much more brain of MySQL, e.g., 
+query analysis, optimization, and all the built-in functions for dates, map operation, encryption, and so forth.<br>
+To begin, The `Rewrite` component will write the query again if it is necessary based on some mysql rules, 
+e.g., if the query contains a `view` the system rewrite the query to access the base table in the wanted view.<br>
+Here, the query is valid and ready for the `opimizer` to turn it into a **query excuation plan**.
+I talked about MySQL various excuation plans in the previous section. 
+Take a look at these [plans' cost estimation](img/mysql_plans_cost_estimation.png).<br>
+
+The third layer contains the storage engines, they are responsible for storing and retrieving all data stored in mysql.
+They are implemented as plugins which make it relatively easy to switch the way to handle the data. 
+InnoDb is the default storage engine for MySQL. 
+
+<p align="center">
+    <img src="img/mysql_architecture.png" alt="mysql_architecture">
+</p>
+<h3 align="center">MySQL Architecture</h3>
+
+#### Spotting performance issues, and High-Performance configuration
 ### Tools
 - [Intellij IDEA Ultimate](https://www.jetbrains.com/idea/)
 - [DB Diagram](https://dbdiagram.io/)
