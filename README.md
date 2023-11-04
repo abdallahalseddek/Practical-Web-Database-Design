@@ -231,6 +231,12 @@ explain format=tree select * from product ;
 > reveal where mySQL spends time on the query and why?
 > display the difference between planning vg actual execution
 
+#### SQL Query Order Execution
+Before any performance steps, It is important to pay attention to the **query execution order**.
+As shown below, this is the order of executing a query statements:
+<p align="center">
+    <img src="img/query_excuation_order.jpg">
+</p>
 
 #### Index performance, covering index, and composite index key best-practices
 [Multi-Column index](img/composite_index.png) is known also as a composite index.<br>
