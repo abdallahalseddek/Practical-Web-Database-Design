@@ -243,7 +243,7 @@ As shown below, this is the order of executing a query statements:
 when querying data from a table, we can do this
 with two conditions, and every column is index individually, Or we can index the two columns in a composite index.
 Also, we can query the data with no index!
-I'm testing in `userinfo` [table](code/userinfo.sql)
+I'm testing in `userinfo` [table](sql/userinfo.sql)
 ```mysql
 -- No index so mysql does a full coverage here and took long time response
 explain analyze select count(*) from userinfo where name = 'John100' and state_id = 100;
