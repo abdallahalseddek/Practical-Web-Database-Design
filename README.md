@@ -48,8 +48,8 @@ Ending By preparing your conceptual data model.<br>
 In the end, the author addresses advanced database features
 - Sub-Queries
 - Stored Procedures and Triggers
-- Database Tuning
-- Types of Index
+- Database Performance Tuning
+- Types of Indexes, and Indexes best practices.
 - Managing Concurrency: Locking and Transactions. <br>
 
 Also, Book Authors address two main chapters about Database Security and Maintenance. 
@@ -73,8 +73,8 @@ products which are not in the same category.
 Here we can find it's reasonable to have a lot of `null` in the `product` entity.<br>
 
 All other rest of system entities are described in the ERD Diagram below and those relationships.
-I Implemented these `model` classes using `Java` , `Spring Data Jpa`. Take a look [here.](code/book_e_commerce_example_impl/src)  
-I used postgreSQL to generate and test the Database, as you can access the `sql` code to create your Own schema from the system [from here.](sql/create_DB_schema_book_e_commerce.sql)
+I Implemented these `model` classes using `Java` , `Spring Data Jpa`. Take a look [here.](code/ecommerce_model_classes)  
+I used postgreSQL to generate and test the Database, as you can access the `sql` code to create your Own schema from the system [from here.](code/sql/create_DB_schema_book_e_commerce.sql)
 
 <p align="center">
     <img src="img/DB_schema_book_e_commerce.png">
@@ -90,8 +90,8 @@ So I linked them with `ManyToMany` Relationship:
 Here we have an associative Entity (**OrderDetails**)  
 * Category always had many products. 
 So it will be a one category linked to many products as `OneToMany` Relation
-> You can Access a``SQL`` file for creating the database schema: [DB Schema.](sql/create_DB_Schema.sql) <br>
-> Also, if you need to test the database design and queries listed below, you can use these [Fake Data.](sql/mock%20data%20genrator)
+> You can Access a``SQL`` file for creating the database schema: [DB Schema.](code/sql/create_DB_Schema.sql) <br>
+> Also, if you need to test the database design and queries listed below, you can use these [Fake Data.](code/sql/Fake_Data)
 
 Here you can find [ERD Normalized](img/task_ERD_Normalized_01.jpg) Form of the app.<br>
 ### DeNormalized Design
@@ -243,7 +243,7 @@ As shown below, this is the order of executing a query statements:
 when querying data from a table, we can do this
 with two conditions, and every column is index individually, Or we can index the two columns in a composite index.
 Also, we can query the data with no index!
-I'm testing in `userinfo` [table](sql/userinfo.sql)
+I'm testing in `userinfo` [table](code/sql/userinfo.sql)
 ```mysql
 -- No index so mysql does a full coverage here and took long time response
 explain analyze select count(*) from userinfo where name = 'John100' and state_id = 100;
