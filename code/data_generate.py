@@ -1,32 +1,52 @@
 import time
+import mysql.connector
 
-# Make sure to import your database library and create a session/connection.
+# Establish a connection to the database
+conn = mysql.connector.connect(user='your_user', password='your_password', database='your_database')
+cursor = conn.cursor()
 
-# Assuming you're using a placeholder like %s (this syntax may vary based on your database library)
-sql = "INSERT INTO `userinfo` ('name', 'email', 'password', 'dob', 'address', 'city', 'state_id', 'zip', 'country_id', 'account_type', 'closest_airport') VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-
-# Parameters for the insert query
-params = ["John", "john.smith@email.com", "1234", "1986-02-14", "1795 Santiago de Compostela Way", "Austin", None, "18743 , 1", "customer account", "aut"]
-
-# Assuming you want to start with state_id 0
-state_id = 0
+# Define the INSERT query template
+insert_query = "INSERT INTO userinfo (`name`, `email`, `password`, `dob`, `address`, `city`, `state_id`, `zip`, `country_id`, `account_type`, `closest_airport`) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
 # Start measuring time
 start_time = time.time()
 
-# Assuming you have a database session (e.g., using pymysql or psycopg2)
-for x in range(0, 1000000):
-    # Increment state_id by 1 for each iteration
-    state_id += 1
+# Assuming you want to insert 1,000,000 rows
+max_rows = 1000000
+state_id = 0
 
-    # Create a tuple of parameters
-    params_tuple = (params[0], params[1], params[2], params[3], params[4], params[5], state_id, params[7], params[8], params[9])
+# Use a transaction for bulk insert
+try:
+    conn.start_transaction()
 
-    # Execute the SQL query
-    result = session.run_sql(sql, params_tuple)
+    for x in range(max_rows):
+        state_id += 1
+        values = (
+            f'John{x}',
+            'john.smith@email.com',
+            '1234',
+            '1986-02-14',
+            '1795 Santiago de Compostela Way',
+            'Austin',
+            state_id,
+            '18743',  # Split the zip and country_id
+            1,  # Provide a separate value for country_id
+            'customer account',
+            'aut'
+        )
+        cursor.execute(insert_query, values)
+
+    conn.commit()  # Commit the transaction
+
+except Exception as e:
+    conn.rollback()  # Rollback the transaction if an error occurs
+    print(f"Error: {e}")
+
+finally:
+    cursor.close()
+    conn.close()
 
 # Calculate total time
 total_time = time.time() - start_time
-
-# Print the total time
 print("Total time: %s seconds" % total_time)
+
