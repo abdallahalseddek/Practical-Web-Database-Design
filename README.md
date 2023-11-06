@@ -159,8 +159,29 @@ LIMIT 5
 ```
 * <h4>Trigger to Create a sale history</h4>
 when the customer purchases a new order, create a history sale in the database for this customer. The sale history details may be order date, customer full name, products purchased in the order. The trigger should be triggered on the order insertion.
-```postgresql
-```
+````mysql
+# Create the sale history table if it doesn't exist
+
+CREATE TABLE IF NOT EXISTS sale_history (
+    sale_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_date DATE,
+    customer_full_name VARCHAR(255),
+    products_purchased TEXT
+);
+# Create the trigger
+
+DELIMITER $$
+CREATE TRIGGER CreateSaleHistory
+AFTER INSERT ON orders
+FOR EACH ROW
+BEGIN
+    INSERT INTO sale_history (order_date, customer_full_name, products_purchased)
+    VALUES (NEW.order_date, CONCAT(NEW.customer_first_name, ' ', NEW.customer_last_name),
+            NEW.products_ordered);
+END;
+$$
+DELIMITER ;
+````
 * <h4>Transaction to lock a field</h4> 
 write a transaction to lock quantity field with product id = 211 from being updated.<br>
 And another transaction to lock the row.
