@@ -14,7 +14,7 @@ BEGIN
 END $$
 
 DELIMITER ;
-call InsertCategory(100000);
+call InsertCategory(10000);
 
 -- Insert in Product table 10k
 DELIMITER $$
@@ -60,7 +60,7 @@ BEGIN
 END $$
 
 DELIMITER ;
-call InsertCustomers(100000);
+call InsertCustomers(10000);
 
 -- Write database functions to insert data in order,
 -- order details tables around row based on the inserted data in customers and products
@@ -69,28 +69,25 @@ DELIMITER $$
 CREATE PROCEDURE InsertOrder(IN order_count INT)
 BEGIN
     DECLARE x INT DEFAULT 1;
+    declare insertedOrderId INT DEFAULT 1;
     WHILE x <= order_count DO
         INSERT INTO orders(order_id, order_date, total_amount,customer_id)
         VALUES(x,
             FROM_UNIXTIME(UNIX_TIMESTAMP('2020-01-01 01:00:00') + FLOOR(RAND() * 31536000)),
             ROUND(RAND()*100,2),
-              (select customer.customer_id from customer
-                  join store.orders o on customer.customer_id = o.customer_id
-                    where customer.customer_id = o.customer_id)
+              (select customer.customer_id from customer ORDER BY RAND() LIMIT 1)
               );
+
         INSERT INTO order_details(order_details_id, quantity,unit_price, order_id,product_id)
         VALUES (x,
                 (22*x),
                 (133.565+x),
-                (select orders.order_id from orders
-                    join order_details on orders.order_id = order_details.order_id
-                    where orders.order_id= order_details.order_id),
-               (SELECT product.product_id FROM product
-                   join store.order_details od on product.product_id = od.product_id)
+                x,
+               (SELECT product.product_id FROM product ORDER BY RAND() LIMIT 1)
                );
         SET x = x + 1;
     END WHILE;
 END $$
 
 DELIMITER ;
-call InsertOrder(100000);
+call InsertOrder(10000);
