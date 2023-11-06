@@ -273,6 +273,54 @@ select * from sys.schema_redundant_indexes\G;
 > you can access the [python script](code/data_generate.py) that I used to generate one million fake data.
 >, also another [script](code/benchmark.py) for benchmark testing.
 
+#### A Query to retrieve the products related to an order which a specific customer purchased
+It is a common use case in all ecommerce websites, 
+so I applied it to our example that I mentioned it the top of this page aganist a 10k records and I tried to optimize its performance
+```mysql
+select  c.customer_id,
+        c.first_name,
+        c.last_name,
+        o.order_id,
+        o.total_amount,
+        p.product_id,
+        p.name
+from customer c join 
+    (orders o join
+    (order_details od join
+        product p on od.product_id = p.product_id)
+    )
+where c.customer_id=500;  -- select the specific customer you want 
+```
+Here in that query,It worked and returned me the desired output. 
+And for curious purposes I executed the query with `explain` keyword, and here is the bad news as 
+I found it's not efficient.
+For 10k rows, it covers almost all the row(9250 rows). I can see it is full coverage, 
+It is very strange because most of the columns are primary and foreign keys, so it's typically indexed.
+After thinking about the issue, I tried to reduce the number of joins. <br>
+```mysql
+# I have nested JOINs, which can be optimized by breaking them into separate queries.
+# This can reduce the complexity and improve readability.
+
+select c.customer_id,
+       c.first_name,
+       c.last_name,
+       o.order_id,
+       o.total_amount,
+       p.product_id,
+       p.name
+from customer c
+    join orders o on c.customer_id = o.customer_id
+    join order_details od on o.order_id = od.order_id
+    join product p on od.product_id = p.product_id
+where c.customer_id=500;
+```
+The result has Blown up my mind, it covers only (2) rows for maximum. 
+using `explain` we'll get this.so Take a look at the results down here: 
+
+<p align="center">
+    <img src="img/explain_optimization_query.png" alt="select optimization query">
+</p>
+
 #### MySQL Architecture
 Mysql is very different from other database servers and, 
 as its architectural characteristics make it useful for a wide range of purposes.
