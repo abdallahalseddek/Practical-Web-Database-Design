@@ -3,7 +3,7 @@ This `README` file contains my hand-work from database concepts discussed in the
 Also, I Implemented the applications described in the book as an illustrative example.<br>
 
 The Repository is a part of collaborative work production in 
-6-Months Mentorship program under the supervision of [Eng.Ahmed Emad](https://www.linkedin.com/in/ahmed-emad-abdelall/).
+a 6 - Month Mentorship program under the supervision of [Eng.Ahmed Emad](https://www.linkedin.com/in/ahmed-emad-abdelall/).
 
 ## Index:
 - [An Intro to the content of the book](#book-content)
