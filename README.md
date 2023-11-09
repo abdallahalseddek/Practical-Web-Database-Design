@@ -1,5 +1,10 @@
 # Practical Web DataBase Design [Book](https://link.springer.com/book/10.1007/978-1-4302-5377-8)
-### This `README` file contains my hand-work from database concepts discussed in the book. Also, I Implemented the applications described in the book as an illustrative example.
+This `README` file contains my hand-work from database concepts discussed in the book.
+Also, I Implemented the applications described in the book as an illustrative example.<br>
+
+The Repository is a part of collaborative work production in 
+6-Months Mentorship program under the supervision of [Eng.Ahmed Emad](https://www.linkedin.com/in/ahmed-emad-abdelall/).
+
 ## Index:
 - [An Intro to the content of the book](#book-content)
 - [Book Example Design and Impl in MySql & PostgresSql](#book-e-commerce-example)
@@ -379,6 +384,10 @@ InnoDb is the default storage engine for MySQL.
     <img src="img/mysql_architecture.png" alt="mysql_architecture">
 </p>
 <h4 align="center">MySQL Architecture</h4>
+
+If you want to access a good recap overview of what 
+I learned in my database journey with the book and my mentor advices,
+I posted [here](Database_Mentorship_Program.png) a one flow chart page containing all of my learning
 
 ### Tools
 - [Intellij IDEA Ultimate](https://www.jetbrains.com/idea/)
