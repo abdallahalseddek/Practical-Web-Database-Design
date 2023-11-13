@@ -1,21 +1,20 @@
 # Practical Web DataBase Design [Book](https://link.springer.com/book/10.1007/978-1-4302-5377-8)
 This `README` file contains my hand-work from database concepts discussed in the book.
 Also, I Implemented the applications described in the book as an illustrative example.<br>
-
 The Repository is a part of collaborative work production in 
-a 6 - Month Mentorship program under the supervision of [Eng.Ahmed Emad](https://www.linkedin.com/in/ahmed-emad-abdelall/).
+a [6-Month Mentorship program](https://t.me/ta5rif_mj/253) under the supervision of [Eng.Ahmed Emad](https://www.linkedin.com/in/ahmed-emad-abdelall/).
 
 ## Index:
 - [An Intro to the content of the book](#book-content)
 - [Book Example Design and Impl in MySql & PostgresSql](#book-e-commerce-example)
 - [Ecommerce Application Design](#my-hands-on-e-commerce-app-design)
-  * [Normalized ERD Design](#denormalized-design)
+  * [DeNormalized ERD Design](#denormalized-design)
 - [Some Common Queries, e.g., top-selling products And Daily or Monthly Reports](#important-queries)
 - [MySQL DataBase Performance Tuning](#database-performance-tuning)
   - [Using `explain` keyword for query Optimization](#using-explain-keyword-for-query-optimization)
   - [Indexes performance and best-practices](#index-performance-covering-index-and-composite-index-key-best-practices)
   - [Comparison Some Queries before and after using performance techniques](#queries-optimization-example-using-explain-analyze-before-and-after-rewriting-the-queries)
-  - [MySQL Architecture](#mysql-architecture)
+  - [MySQL Architecture](MySQL.md)
 - [The Tools which I used In the project](#tools)
   
 ### Book Content
@@ -362,45 +361,7 @@ using `explain` we'll get this.so Take a look at the results down here:
 | `select p.product_id,p.name,p.stock_quantity from product p where stock_quantity<10;`                                                                                                                                       | 1.9 ms | create index of `stock_quantity`                                                    | `create index idx_quantity on product (stock_quantity);`                                                                                                                                                                                                                                                                                | 1.7 ms |
 | `SELECT p.category_id, cat.category_name, SUM(p.price) as total_price FROM product p JOIN category cat ON p.category_id = cat.category_id WHERE cat.category_name = 'category1' GROUP BY p.category_id, cat.category_name;` | 1.6 ms | Avoid Unnecessary Columns in `GROUP BY`                                             | `SELECT p.category_id, cat.category_name, SUM(p.price) as total_price FROM product p JOIN category cat ON p.category_id = cat.category_id WHERE cat.category_name = 'category1' GROUP BY p.category_id;`                                                                                                                                | 1.5 ms |
 
-#### MySQL Architecture
-Mysql is very different from other database servers and, 
-as its architectural characteristics make it useful for a wide range of purposes.
-It's flexible enough to work well in very demanding environments, 
-e.g., web apps, data warehouse, online transactions.<br>
-To get the most of MySQL, you should understand well its design so to work with it not against it.<br>
-
-MySql server is divided into three layers as shown below. 
-The first layer contains the services that are not unique to MySQL: connection handling, authentication, security, and so for.
-The client server protocol makes MySQL communication simple and fast, but it is limited as there is no flow control.
-Once one side sends a message, the other side must fetch the entire message before responding. 
-This is why `limit` clauses are so important.<br>
-
-The default behavior for most libraries when connecting to mysql is to 
-fetch the whole result and buffer it in memory. Until the all rows is being fetched, 
-MySQL server will not release the logs and other resources required by the query.<br>
-
-After handling the connection, mysql parser breaks the query into tokens and 
-builds a [parse tree](img/parse_tree_example.png) from the query parts.
-Parser uses `sql` grammar to interpret and validate the query. Next, the preprocessor checks the privileges.<br>
-
-The second layer included the much more brain of MySQL, e.g., 
-query analysis, optimization, and all the built-in functions for dates, map operation, encryption, and so forth.<br>
-To begin, The `Rewrite` component will write the query again if it is necessary based on some mysql rules, 
-e.g., if the query contains a `view` the system rewrite the query to access the base table in the wanted view.<br>
-Here, the query is valid and ready for the `opimizer` to turn it into a **query excuation plan**.
-I talked about MySQL various excuation plans in the previous section. 
-Take a look at these [plans' cost estimation](img/mysql_plans_cost_estimation.png).<br>
-
-The third layer contains the storage engines, they are responsible for storing and retrieving all data stored in mysql.
-They are implemented as plugins which make it relatively easy to switch the way to handle the data. 
-InnoDb is the default storage engine for MySQL. 
-
-<p align="center">
-    <img src="img/mysql_architecture.png" alt="mysql_architecture">
-</p>
-<h4 align="center">MySQL Architecture</h4>
-
-If you want to access a good recap overview of what 
+If you want to access a good recap overview of what
 I learned in my database journey with the book and my mentor advices,
 I posted [here](Database_Mentorship_Program.png) a one flow chart page containing all of my learning
 
